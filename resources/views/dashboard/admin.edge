@@ -1,0 +1,105 @@
+@layout('layouts/main')
+
+@set('title', 'Dashboard Admin')
+
+@section('main')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Dashboard Admin</h2>
+    <span class="badge bg-success">Admin</span>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-book-half display-4 me-3"></i>
+                    <div>
+                        <h4>{{ stats.kursus }}</h4>
+                        <p class="mb-0">Total Kursus</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-badge display-4 me-3"></i>
+                    <div>
+                        <h4>{{ stats.instruktur }}</h4>
+                        <p class="mb-0">Total Instruktur</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-people display-4 me-3"></i>
+                    <div>
+                        <h4>{{ stats.peserta }}</h4>
+                        <p class="mb-0">Total Peserta</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-clipboard-check display-4 me-3"></i>
+                    <div>
+                        <h4>{{ stats.pendaftaran }}</h4>
+                        <p class="mb-0">Total Pendaftaran</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Menu Utama</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{{ route('kursus.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-book-half"></i> Kelola Kursus
+                    </a>
+                    <a href="{{ route('instruktur.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-badge"></i> Kelola Instruktur
+                    </a>
+                    <a href="{{ route('pendaftaran.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-clipboard-check"></i> Kelola Pendaftaran
+                    </a>
+                    <a href="{{ route('peserta.index') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people"></i> Kelola Peserta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Laporan</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{{ route('reports.peserta') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-graph-up"></i> Peserta per Kursus
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

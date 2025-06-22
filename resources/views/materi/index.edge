@@ -1,0 +1,83 @@
+@layout('layouts/main')
+
+@set('title', 'Kelola Materi - ' + kursus.namaKursus)
+
+@section('main')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('kursus.index') }}">Kursus</a></li>
+        <li class="breadcrumb-item active">Materi - {{ kursus.namaKursus }}</li>
+    </ol>
+</nav>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>Materi Kursus</h2>
+        <h5 class="text-muted">{{ kursus.namaKursus }}</h5>
+    </div>
+    <a href="{{ route('materi.create', [kursus.id]) }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Tambah Materi
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        @if(materis.length > 0)
+            <div class="row">
+                @each(materi in materis)
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-file-text text-primary"></i>
+                                    {{ materi.judul }}
+                                </h5>
+                                <p class="card-text text-muted">{{ materi.deskripsi }}</p>
+                                @if(materi.filePath)
+                                    <div class="mb-2">
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-paperclip"></i> File Tersedia
+                                        </span>
+                                    </div>
+                                @endif
+                                <small class="text-muted">
+                                    Dibuat: {{ materi.createdAt.toFormat('dd/MM/yyyy') }}
+                                </small>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group btn-group-sm w-100">
+                                    @if(materi.filePath)
+                                        <a href="/uploads/materi/{{ materi.filePath }}" class="btn btn-outline-success" target="_blank">
+                                            <i class="bi bi-download"></i> Download
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('materi.edit', [materi.id]) }}" class="btn btn-outline-warning">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <form action="{{ route('materi.destroy', [materi.id]) }}" method="POST" class="d-inline">
+                                        {{ csrfField() }}
+                                        {{ method('DELETE') }}
+                                        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Yakin ingin menghapus materi ini?')">
+                                            <i class="bi bi-trash"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endeach
+            </div>
+        @else
+            <div class="text-center py-5">
+                <i class="bi bi-file-earmark-text display-1 text-muted"></i>
+                <h5 class="mt-3">Belum Ada Materi</h5>
+                <p class="text-muted">Belum ada materi yang ditambahkan untuk kursus ini.</p>
+                <a href="{{ route('materi.create', [kursus.id]) }}" class="btn btn-primary">
+                    <i class="bi bi-plus"></i> Tambah Materi Pertama
+                </a>
+            </div>
+        @endif
+    </div>
+</div>
+@endsection

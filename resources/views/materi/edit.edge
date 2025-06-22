@@ -1,0 +1,56 @@
+@layout('layouts/main')
+
+@set('title', 'Edit Materi')
+
+@section('main')
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Edit Materi</h4>
+                <small class="text-muted">Kursus: {{ materi.kursus.namaKursus }}</small>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('materi.update', [materi.id]) }}" method="POST" enctype="multipart/form-data">
+                    {{ csrfField() }}
+                    {{ method('PATCH') }}
+
+                    <div class="mb-3">
+                        <label for="judul" class="form-label">Judul Materi</label>
+                        <input type="text" class="form-control" id="judul" name="judul" value="{{ materi.judul }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required>{{ materi.deskripsi }}</textarea>
+                    </div>
+
+                    @if(materi.filePath)
+                        <div class="mb-3">
+                            <label class="form-label">File Saat Ini</label>
+                            <div class="alert alert-info">
+                                <i class="bi bi-file-earmark"></i> {{ materi.filePath }}
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="mb-3">
+                        <label for="file" class="form-label">File Materi (Opsional - Kosongkan jika tidak ingin mengubah)</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.mp4,.avi,.mkv">
+                        <div class="form-text">Format yang didukung: PDF, DOC, DOCX, PPT, PPTX, JPG, JPEG, PNG, MP4, AVI, MKV (Max: 10MB)</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('materi.index', [materi.kursusId]) }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

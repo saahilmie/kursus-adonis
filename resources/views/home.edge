@@ -1,0 +1,77 @@
+@layout('layouts/main')
+
+@set('title', 'Home')
+
+@section('main')
+
+<div class="test-bootstrap">
+    <h1>Test CSS</h1>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+            <h1 class="display-4">Selamat Datang di Sistem Kursus</h1>
+            <p class="lead">Platform pembelajaran online dengan berbagai kursus berkualitas dari instruktur terpercaya.</p>
+            <hr class="my-4">
+            <p>Mulai perjalanan belajar Anda hari ini!</p>
+            <a class="btn btn-light btn-lg" href="{{ route('kursus.public') }}" role="button">
+                <i class="bi bi-search"></i> Lihat Kursus
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-book-half display-1 text-primary"></i>
+                <h5 class="card-title">Kursus Berkualitas</h5>
+                <p class="card-text">Dapatkan akses ke berbagai kursus dari instruktur berpengalaman.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-people-fill display-1 text-success"></i>
+                <h5 class="card-title">Komunitas Belajar</h5>
+                <p class="card-text">Bergabung dengan komunitas pelajar dari seluruh Indonesia.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-award-fill display-1 text-warning"></i>
+                <h5 class="card-title">Sertifikat</h5>
+                <p class="card-text">Dapatkan sertifikat setelah menyelesaikan kursus.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(featuredKursuses.length > 0)
+<div class="row mt-5">
+    <div class="col-12">
+        <h2 class="mb-4">Kursus Terbaru</h2>
+    </div>
+    @each(kursus in featuredKursuses)
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ kursus.namaKursus }}</h5>
+                <p class="card-text">{{ kursus.deskripsi || 'Deskripsi belum tersedia' }}</p>
+                <p class="text-muted">Instruktur: {{ kursus.instruktur.nama }}</p>
+                <p class="text-muted">Durasi: {{ kursus.durasi }} jam</p>
+                <p class="fw-bold">Rp {{ kursus.biaya.toLocaleString('id-ID') }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('kursus.show', [kursus.id]) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+            </div>
+        </div>
+    </div>
+    @end
+</div>
+@endif
+@endsection

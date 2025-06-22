@@ -1,0 +1,72 @@
+@layout('layouts/app')
+
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-tachometer-alt"></i> Dashboard Peserta</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Kursus Tersedia</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @each(item in kursusAvailable)
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ item.namaKursus }}</h5>
+                                    <p class="card-text">
+                                        <strong>Instruktur:</strong> {{ item.instruktur.nama }}<br>
+                                        <strong>Durasi:</strong> {{ item.durasi }} jam<br>
+                                        <strong>Biaya:</strong> Rp {{ item.biaya.toLocaleString('id-ID') }}<br>
+                                        <strong>Peserta:</strong> {{ item.$extras.pendaftaran_count }} orang
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <form method="POST" action="/kursus/{{ item.id }}/register">
+                                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                                            <i class="fas fa-user-plus"></i> Daftar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-12">
+                            <p class="text-center">Belum ada kursus tersedia</p>
+                        </div>
+                    @endeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-clipboard-list"></i> Pendaftaran Saya</h5>
+            </div>
+            <div class="card-body">
+                @each(item in myRegistrations)
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ item.kursus.namaKursus }}</h6>
+                            <p class="card-text">
+                                <small>Instruktur: {{ item.kursus.instruktur.nama }}</small><br>
+                                <span class="badge bg-{{ item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning' }}">
+                                    {{ item.status }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                @else
+                    <p class="text-center">Belum ada pendaftaran</p>
+                @endeach
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

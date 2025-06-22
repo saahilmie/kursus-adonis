@@ -1,0 +1,139 @@
+@layout('layouts/main')
+
+@set('title', 'Kelola Pendaftaran')
+
+@section('main')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Kelola Pendaftaran</h2>
+    <div>
+        <span class="badge bg-warning me-2">Pending: {{ pendaftarans.filter(p => p.status === 'pending').length }}</span>
+        <span class="badge bg-success me-2">Approved: {{ pendaftarans.filter(p => p.status === 'approved').length }}</span>
+        <span class="badge bg-danger">Rejected: {{ pendaftarans.filter(p => p.status === 'rejected').length }}</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        @if(pendaftarans.length > 0)
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Peserta</th>
+                            <th>Kursus</th>
+                            <th>Instruktur</th>
+                            <th>Status</th>
+                            <th>Tanggal Daftar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(pendaftaran in pendaftarans)
+                            <tr>
+                                <td>{{ pendaftaran.id }}</td>
+                                <td>
+                                    <div>
+                                        <strong>{{ pendaftaran.peserta.nama }}</strong><br>
+                                        <small class="text-muted">{{ pendaftaran.peserta.email }}</small>
+                                    </div>
+                                </td>
+                                <td>{{ pendaftaran.kursus.namaKursus }}</td>
+                                <td>{{ pendaftaran.kursus.instruktur.nama }}</td>
+                                <td>
+                                    @if(pendaftaran.status === 'pending')
+                                        <span class="badge bg-warning">
+                                            <i class="bi bi-clock"></i> Pending
+                                        </span>
+                                    @elseif(pendaftaran.status === 'approved')
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle"></i> Approved
+                                        </span>
+                                    @else
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-x-circle"></i> Rejected
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>{{ pendaftaran.createdAt.toFormat('dd/MM/yyyy HH:mm') }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        @if(pendaftaran.status === 'pending')
+                                            <form action="{{ route('pendaftaran.approve', [pendaftaran.id]) }}" method="POST" class="d-inline">
+                                                {{ csrfField() }}
+                                                {{ method('PATCH') }}
+                                                <button type="submit" class="btn btn-success" title="Setujui" onclick="return confirm('Setujui pendaftaran ini?')">
+                                                    <i class="bi bi-check"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('pendaftaran.reject', [pendaftaran.id]) }}" method="POST" class="d-inline">
+                                                {{ csrfField() }}
+                                                {{ method('PATCH') }}
+                                                <button type="submit" class="btn btn-warning" title="Tolak" onclick="return confirm('Tolak pendaftaran ini?')">
+                                                    <i class="bi bi-x"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                        <form action="{{ route('pendaftaran.destroy', [pendaftaran.id]) }}" method="POST" class="d-inline">
+                                            {{ csrfField() }}
+                                            {{ method('DELETE') }}
+                                            <button type="submit" class="btn btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus pendaftaran ini?')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="text-center py-4">
+                <i class="bi bi-clipboard-x display-1 text-muted"></i>
+                <h5 class="mt-3">Belum Ada Pendaftaran</h5>
+                <p class="text-muted">Belum ada pendaftaran kursus yang masuk.</p>
+            </div>
+        @endif
+    </div>
+</div>
+
+<!-- Filter & Stats Card -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Statistik Pendaftaran</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="bg-light p-3 rounded">
+                            <h4 class="text-primary">{{ pendaftarans.length }}</h4>
+                            <p class="mb-0">Total Pendaftaran</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bg-light p-3 rounded">
+                            <h4 class="text-warning">{{ pendaftarans.filter(p => p.status === 'pending').length }}</h4>
+                            <p class="mb-0">Menunggu Persetujuan</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bg-light p-3 rounded">
+                            <h4 class="text-success">{{ pendaftarans.filter(p => p.status === 'approved').length }}</h4>
+                            <p class="mb-0">Disetujui</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bg-light p-3 rounded">
+                            <h4 class="text-danger">{{ pendaftarans.filter(p => p.status === 'rejected').length }}</h4>
+                            <p class="mb-0">Ditolak</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
